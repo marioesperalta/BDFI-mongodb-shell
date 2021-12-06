@@ -61,7 +61,7 @@ Usar la BBDD data:
 En la compañía de nombre "VistaGen Therapeutics", añadirle como email_address tu email de alumno upm (acabado en @alumnos.upm.es)
 
 ```
-> db.companies.updateOne({name: "VistaGen Therapeutics"},{$set:{email_address:"NOMBRE_ALUMNO@alumnos.upm.es"}})
+> db.companies.updateOne({name: "VistaGen Therapeutics"},{$set:{email_address:"m.esperalta@alumnos.upm.es"}})
 ```
 Para comprobar que se ha cambiado correctamente:
 ```
@@ -83,7 +83,7 @@ los existentes que ponga:
 > db.companies.updateMany({founded_year:{$gte:2012}},{$set:{uptodate: true}})
 ```
 
-### 4. Borrar un campoç
+### 4. Borrar un campo
 En la compañía de nombre "Fixya" borra el campo “twitter_username” (solo ese campo, no todo el documento)
 ```
 > db.companies.updateOne({name:"Fixya"},{$unset:{"twitter_username":""}})
@@ -95,3 +95,65 @@ Borra la compañía fundada el 21 de abril de 2009.
 ```
 > db.companies.deleteOne({founded_year:2009,founded_month:4,founded_day:21})
 ```
+
+
+### 6. Insertar documento con resultados de “count” (contar)
+En este apartado haremos varias queries de búsqueda sobre la colección y guardaremos los resultados en una nueva colección de nombre “results”.
+
+6.a) Contar cuantas compañías tienen más de 100 empleados.
+
+6.b) Contar cuantas compañías tienen 2 oficinas.
+
+6.c) Contar cuantas compañías tienen en el primero de sus milestones en el año 2012.
+
+(campo stoned_year dentro del array de milestones).
+
+6.d) Contar cuantas compañías tienen el campo opening_date que es de tipo fecha (Date o ISODate) posterior al año 2020 (usar new ISODate(“2020-01-01”)).
+
+![Apartado 6](images/task_6.png)
+
+Con estos tres datos crear un documento como sigue e insertarlo en la misma base de datos (companies) en una colección nueva de nombre “results”. Es decir habrá ahora dos colecciones, “companies” y “results” en la misma base de datos de nombre “data”.
+```
+db.results.insertOne(
+    {
+    _id: 1,
+    email: "m.esperalta@alumnos.upm.es",
+    results: {
+        mas_empleados: 16,
+        dos_oficinas: 33,
+        m_2012: 10,
+        recientes: 89
+    }
+    }
+)
+```
+
+### 7. Meter en array
+La compañía de nombre “FoodCare”, añade al array de products un nuevo producto, con el campo “name” y valor “Future Edition” y campo “permalink” valor “future-edition”
+```
+db.companies.update({name:"FoodCare"},{$push:{products:{name:"Future Edition", permalink:"future-edition"}}})
+```
+
+### 8. Actualizar array
+La compañía de nombre “FoodCare”, en el array de products, que la segunda posición en lugar de "Corporate Edition" diga “Company Edition”
+```
+db.companies.updateOne({"name":"FoodCare"},{$set:{"products.1.name":"Company Edition"}})
+```
+
+### 9. Sacar de array
+En la compañía de nombre “CircleUp”, en el campo relationships, quita aquellas que tengan el campo “is_past” a true
+```
+db.companies.update({"name":"CircleUp"},{$pull: {relationships: {is_past:true}}})
+```
+
+### 10. Cambiar el tipo de datos en un campo
+La compañía de nombre “Gimigo”, queremos que su teléfono sea el mismo que tiene pero sin los paréntesis ni guiones, siendo un Number en lugar de un string.
+Se mira el campo en la base de datos en su formato string y se hace upload con su valor en number.
+```
+db.companies.find({name:"Gimigo"},{phone_number:1})
+db.companies.update({name:"Gimigo"},{$set: {phone_number:2065382800}})
+```
+
+### 11. Evaluación mediante autocorector
+
+![Resultados](images/results.png)
