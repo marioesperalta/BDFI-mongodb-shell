@@ -69,7 +69,7 @@ Para comprobar que se ha cambiado correctamente:
 ```
 
 ### 2. Actualizar creando un campo array
-En la compañía de nombre "VistaGen Therapeutics" queremos que haya un nuevocampo “owners” que sea un array y que inicialmente tenga solo un documento con valor:
+En la compañía de nombre "VistaGen Therapeutics" queremos que haya un nuevo campo “owners” que sea un array y que inicialmente tenga solo un documento con valor:
 `{ nombre: TU_NOMBRE, token: TU_TOKEN_DE_MOODLE }`
 ```
 > db.companies.updateOne({name:"VistaGen Therapeutics"},{$set:{owners: {nombre: "Mario", token: "TOKEN DE MOODLE" }}})
@@ -112,7 +112,7 @@ En este apartado haremos varias queries de búsqueda sobre la colección y guard
 
 ![Apartado 6](images/task_6.png)
 
-Con estos tres datos crear un documento como sigue e insertarlo en la misma base de datos (companies) en una colección nueva de nombre “results”. Es decir habrá ahora dos colecciones, “companies” y “results” en la misma base de datos de nombre “data”.
+Con estos cuatro datos crear un documento como sigue e insertarlo en la misma base de datos (companies) en una colección nueva de nombre “results”. Es decir habrá ahora dos colecciones, “companies” y “results” en la misma base de datos de nombre “data”.
 ```
 db.results.insertOne(
     {
@@ -148,6 +148,7 @@ db.companies.update({"name":"CircleUp"},{$pull: {relationships: {is_past:true}}}
 
 ### 10. Cambiar el tipo de datos en un campo
 La compañía de nombre “Gimigo”, queremos que su teléfono sea el mismo que tiene pero sin los paréntesis ni guiones, siendo un Number en lugar de un string.
+
 Se mira el campo en la base de datos en su formato string y se hace upload con su valor en number.
 ```
 db.companies.find({name:"Gimigo"},{phone_number:1})
